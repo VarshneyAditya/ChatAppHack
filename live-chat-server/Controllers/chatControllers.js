@@ -132,10 +132,44 @@ const groupExit = asyncHandler(async (req, res) => {
   }
 });
 
+const addSelfToGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+  console.log("HELLO--- ", req.body);
+
+  try {
+    const added = await Chat.findByIdAndUpdate(
+      chatId,
+      {
+        $push: {
+          users: userId,
+        },
+      },
+      {
+        new: true,
+      }
+    )
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .exec(); // Using exec() to await the query result
+
+    if (!added) {
+      res.status(404).send();
+    } else {
+      res.send(added);
+    }
+  } catch (error) {
+    // Handle any errors that might occur during the database operation
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 module.exports = {
   accessChat,
   fetchChats,
   fetchGroups,
   createGroupChat,
   groupExit,
+  addSelfToGroup,
 };
