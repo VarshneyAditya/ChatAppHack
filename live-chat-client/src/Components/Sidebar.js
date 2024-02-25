@@ -48,6 +48,10 @@ function Sidebar() {
     });
   }, [refresh]);
 
+  useEffect(() => {
+  console.log({ conversations });
+  })
+
   return (
     <div className="sidebar-container">
       <div className={"sb-header" + (lightTheme ? "" : " dark")}>
@@ -138,20 +142,33 @@ function Sidebar() {
                   key={index}
                   className="conversation-container"
                   onClick={() => {
-                    navigate(
-                      "chat/" +
-                        conversation._id +
-                        "&" +
-                        conversation.users[1].name
-                    );
+                    if (conversation.isGroupChat) {
+                      navigate(
+                        "chat/" +
+                          conversation._id +
+                          "&" +
+                          conversation.chatName
+                      );
+                    } else {
+                      navigate(
+                        "chat/" +
+                          conversation._id +
+                          "&" +
+                          conversation.users[1].name
+                      );
+                    }
                   }}
                   // dispatch change to refresh so as to update chatArea
                 >
                   <p className={"con-icon" + (lightTheme ? "" : " dark")}>
-                    {conversation.users[1].name[0]}
+                    {conversation.isGroupChat === true
+                    ? conversation.chatName[0]
+                    : conversation.users[1].name[0]}
                   </p>
                   <p className={"con-title" + (lightTheme ? "" : " dark")}>
-                    {conversation.users[1].name}
+                    {conversation.isGroupChat === true
+                    ? conversation.chatName
+                    : conversation.users[1].name}
                   </p>
 
                   <p className="con-lastMessage">
@@ -169,23 +186,36 @@ function Sidebar() {
                 key={index}
                 className="conversation-container"
                 onClick={() => {
-                  navigate(
-                    "chat/" +
-                      conversation._id +
-                      "&" +
-                      conversation.users[1].name
-                  );
+                  if (conversation.isGroupChat) {
+                    navigate(
+                      "chat/" +
+                        conversation._id +
+                        "&" +
+                        conversation.chatName
+                    );
+                  } else {
+                    navigate(
+                      "chat/" +
+                        conversation._id +
+                        "&" +
+                        conversation.users[1].name
+                    );
+                  }
                 }}
               >
                 <p className={"con-icon" + (lightTheme ? "" : " dark")}>
-                  {conversation.users[1].name[0]}
+                  {conversation.isGroupChat === true
+                    ? conversation.chatName[0]
+                    : conversation.users[1].name[0]}
                 </p>
                 <p className={"con-title" + (lightTheme ? "" : " dark")}>
-                  {conversation.users[1].name}
+                  {conversation.isGroupChat === true
+                    ? conversation.chatName
+                    : conversation.users[1].name}
                 </p>
 
                 <p className="con-lastMessage">
-                  {conversation.latestMessage.content}
+                  {conversation.latestMessage?.content}
                 </p>
                 {/* <p className={"con-timeStamp" + (lightTheme ? "" : " dark")}>
                 {conversation.timeStamp}

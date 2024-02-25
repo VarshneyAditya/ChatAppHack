@@ -79,6 +79,7 @@ function Groups() {
           <input
             placeholder="Search"
             className={"search-box" + (lightTheme ? "" : " dark")}
+            onChange={(e) => console.log('===> ', e.target.value)}
           />
         </div>
         <div className="ug-list">
@@ -90,19 +91,22 @@ function Groups() {
                 className={"list-tem" + (lightTheme ? "" : " dark")}
                 key={index}
                 onClick={() => {
-                  console.log("Creating chat with group", group.name);
-                  // const config = {
-                  //   headers: {
-                  //     Authorization: `Bearer ${userData.data.token}`,
-                  //   },
-                  // };
-                  // axios.post(
-                  //   "http://localhost:8080/chat/",
-                  //   {
-                  //     userId: user._id,
-                  //   },
-                  //   config
-                  // );
+                  console.log("Creating chat with group", group.chatName);
+                  console.log("GROUP id: ", group._id);
+                  const config = {
+                    headers: {
+                      Authorization: `Bearer ${userData.data.token}`,
+                    },
+                  };
+                  console.log("CONFIG : ", config);
+                  axios.put(
+                    "http://localhost:8080/chat/addSelfToGroup",
+                    {
+                      chatId: group._id,
+                      userId: userData.data._id,
+                    },
+                    config
+                  );
                   dispatch(refreshSidebarFun());
                 }}
               >

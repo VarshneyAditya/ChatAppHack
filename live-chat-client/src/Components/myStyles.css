@@ -240,6 +240,8 @@ input:focus {
 
 .welcome-logo {
   height: 20vw;
+  width: 75%;
+  background-color: purple;
 }
 
 .welcome-container {

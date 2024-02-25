@@ -9,25 +9,29 @@ import { useParams } from "react-router-dom";
 import Skeleton from "@mui/material/Skeleton";
 import axios from "axios";
 import { myContext } from "./MainContainer";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:8080";
+
+var socket
 function ChatArea() {
   const lightTheme = useSelector((state) => state.themeKey);
   const [messageContent, setMessageContent] = useState("");
   const messagesEndRef = useRef(null);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split("&");
-  // console.log(chat_id, chat_user);
+  console.log('====|||||||====== ', chat_id, chat_user);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [allMessages, setAllMessages] = useState([]);
-  // console.log("Chat area id : ", chat_id._id);
-  // const refresh = useSelector((state) => state.refreshKey);
+
   const { refresh, setRefresh } = useContext(myContext);
   const [loaded, setloaded] = useState(false);
+  const [socketConnectionStatus, setSocketConnectionStatus] = useState(false);
+
   const sendMessage = () => {
-    // console.log("SendMessage Fired to", chat_id._id);
     const config = {
       headers: {
-        Authorization: `Bearer ${userData.data.token}`,
+        Authorization: `Bearer ${userData?.data?.token}`,
       },
     };
     axios
@@ -40,18 +44,60 @@ function ChatArea() {
         config
       )
       .then(({ data }) => {
-        console.log("Message Fired");
+        console.log("Message Fired", data);
+          setAllMessages((prevMessages) => {
+            // Check if the new message already exists in the array
+            const isDuplicate = prevMessages.some(
+              (message) => message._id === data._id
+            );
+  
+            // Update the state only if it's not a duplicate
+            if (!isDuplicate) {
+              return [...prevMessages, data];
+            }
+  
+            // If it's a duplicate, return the current state without modifications
+            return prevMessages;
+          });
+        socket.emit("new message", data);
       });
   };
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  // };
+
+  // connect to socket
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", userData);
+    socket.on("connection", () => {
+      setSocketConnectionStatus(!socketConnectionStatus);
+    });
+  }, []);
+
+  // new message recieved
+  useEffect(() => {
+    socket.on("message recieved", (newMessage) => {
+      if (!allMessages || allMessages._id !== newMessage._id) {
+        setAllMessages((prevMessages) => {
+          // Check if the new message already exists in the array
+          const isDuplicate = prevMessages.some(
+            (message) => message._id === newMessage._id
+          );
+
+          // Update the state only if it's not a duplicate
+          if (!isDuplicate) {
+            return [...prevMessages, newMessage];
+          }
+
+          // If it's a duplicate, return the current state without modifications
+          return prevMessages;
+        });
+      }
+    });
+  });
 
   useEffect(() => {
-    console.log("Users refreshed");
     const config = {
       headers: {
-        Authorization: `Bearer ${userData.data.token}`,
+        Authorization: `Bearer ${userData?.data?.token}`,
       },
     };
     axios
@@ -59,10 +105,10 @@ function ChatArea() {
       .then(({ data }) => {
         setAllMessages(data);
         setloaded(true);
-        // console.log("Data from Acess Chat API ", data);
+        socket.emit("join chat", chat_id);
       });
-    // scrollToBottom();
-  }, [refresh, chat_id, userData.data.token]);
+    setAllMessages(allMessages);
+  }, [refresh, chat_id, userData?.data?.token]);
 
   if (!loaded) {
     return (
@@ -121,7 +167,7 @@ function ChatArea() {
             .reverse()
             .map((message, index) => {
               const sender = message.sender;
-              const self_id = userData.data._id;
+              const self_id = userData?.data?._id;
               if (sender._id === self_id) {
                 // console.log("I sent it ");
                 return <MessageSelf props={message} key={index} />;
