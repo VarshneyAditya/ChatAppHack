@@ -7,6 +7,8 @@ import Welcome from "./Components/Welcome";
 import ChatArea from "./Components/ChatArea";
 import Users from "./Components/Users";
 import CreateGroups from "./Components/CreateGroups";
+import ChatLogTable from "./Components/ChatLogTable";
+
 import Groups from "./Components/Groups";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -25,6 +27,7 @@ function App() {
           <Route path="users" element={<Users />}></Route>
           <Route path="groups" element={<Groups />}></Route>
           <Route path="create-groups" element={<CreateGroups />}></Route>
+          <Route path="chat-log-table" element={<ChatLogTable />}></Route>
         </Route>
       </Routes>
     </div>

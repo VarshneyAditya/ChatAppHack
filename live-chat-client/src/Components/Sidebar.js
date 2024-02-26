@@ -3,6 +3,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { IconButton } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import NightlightIcon from "@mui/icons-material/Nightlight";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -106,17 +107,10 @@ function Sidebar() {
 
           <IconButton
             onClick={() => {
-              dispatch(toggleTheme());
+              navigate("chat-log-table");
             }}
           >
-            {lightTheme && (
-              <NightlightIcon
-                className={"icon" + (lightTheme ? "" : " dark")}
-              />
-            )}
-            {!lightTheme && (
-              <LightModeIcon className={"icon" + (lightTheme ? "" : " dark")} />
-            )}
+            <NewspaperIcon className={"icon" + (lightTheme ? "" : " dark")} />
           </IconButton>
           <IconButton
             onClick={() => {
