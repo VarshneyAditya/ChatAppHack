@@ -25,6 +25,7 @@ function Sidebar() {
   const [conversations, setConversations] = useState([]);
   // console.log("Conversations of Sidebar : ", conversations);
   const userData = JSON.parse(localStorage.getItem("userData"));
+  const [chatName, setChatName] = useState("NA");
   // console.log("Data from LocalStorage : ", userData);
   const nav = useNavigate();
   if (!userData) {
@@ -33,6 +34,7 @@ function Sidebar() {
   }
 
   const user = userData.data;
+  const userId = user._id;
   useEffect(() => {
     // console.log("Sidebar : ", user.token);
     const config = {
@@ -49,8 +51,22 @@ function Sidebar() {
   }, [refresh]);
 
   useEffect(() => {
-  console.log({ conversations });
-  })
+    console.log({ conversations }, { user });
+    const senderConversation = conversations.find(
+      ({ chatName }) => chatName === "sender"
+    );
+    // Destructure the users property from the found conversation, defaulting to an empty object if not found
+    const { users = {} } = senderConversation || {};
+    // Destructure the _id property from the user object, defaulting to an empty string if not found
+    const { _id: Id = "" } = user || {};
+    console.log({ users });
+    // Check if users is an array before using the find method
+    const { name } = Array.isArray(users)
+      ? users.find(({ _id }) => _id !== Id) || {}
+      : {};
+    console.log({ name });
+    setChatName(name)
+  });
 
   return (
     <div className="sidebar-container">
@@ -150,12 +166,17 @@ function Sidebar() {
                           conversation.chatName
                       );
                     } else {
-                      navigate(
-                        "chat/" +
-                          conversation._id +
-                          "&" +
-                          conversation.users[1].name
-                      );
+                      const { _id: Id = "" } = user || {};
+                      // Check if users is an array before using the find method
+                      const { name } = Array.isArray(conversation)
+                        ? conversation.find(({ _id }) => _id !== Id) || {}
+                        : {};
+                        navigate(
+                          "chat/" +
+                            conversation._id +
+                            "&" +
+                            name
+                        );
                     }
                   }}
                   // dispatch change to refresh so as to update chatArea
@@ -194,13 +215,17 @@ function Sidebar() {
                         conversation.chatName
                     );
                   } else {
-                    navigate(
-                      "chat/" +
-                        conversation._id +
-                        "&" +
-                        conversation.users[1].name
-                    );
-                  }
+                    // Check if users is an array before using the find method
+                    const { name } = Array.isArray(conversation)
+                      ? conversation.find(({ _id }) => _id !== userId) || {}
+                      : {};
+                      navigate(
+                        "chat/" +
+                          conversation._id +
+                          "&" +
+                          name
+                      );
+                    }
                 }}
               >
                 <p className={"con-icon" + (lightTheme ? "" : " dark")}>

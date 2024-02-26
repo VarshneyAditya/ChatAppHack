@@ -20,7 +20,6 @@ function ChatArea() {
   const messagesEndRef = useRef(null);
   const dyParams = useParams();
   const [chat_id, chat_user] = dyParams._id.split("&");
-  console.log('====|||||||====== ', chat_id, chat_user);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [allMessages, setAllMessages] = useState([]);
 

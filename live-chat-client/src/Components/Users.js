@@ -17,6 +17,7 @@ function Users() {
 
   const lightTheme = useSelector((state) => state.themeKey);
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState('');
   const userData = JSON.parse(localStorage.getItem("userData"));
   // console.log("Data from LocalStorage : ", userData);
   const nav = useNavigate();
@@ -28,18 +29,38 @@ function Users() {
   }
 
   useEffect(() => {
-    console.log("Users refreshed");
+    console.log("Users refreshed", {search});
     const config = {
       headers: {
         Authorization: `Bearer ${userData.data.token}`,
       },
     };
-    axios.get("http://localhost:8080/user/fetchUsers", config).then((data) => {
+    axios.get(`http://localhost:8080/user/fetchUsers?search=${search}`, config).then((data) => {
       console.log("UData refreshed in Users panel ");
       setUsers(data.data);
       // setRefresh(!refresh);
     });
-  }, [refresh]);
+  }, [refresh, search]);
+
+  const getAllTags = (user) => {
+    const { tags = [] } = user;
+    if (tags.length) {
+      return tags?.map((tag) => (
+        <>
+        <div style={{ marginLeft: "20px", fontSize: "small" }}>|</div>
+          <div
+            className={"con-title" + (lightTheme ? "" : " dark")}
+            style={{ marginLeft: "10px", fontSize: "small" }}
+          >
+            {tag}
+          </div>
+          <div style={{ marginLeft: "10px", fontSize: "small" }}>|</div>
+        </>
+      ));
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -76,6 +97,7 @@ function Users() {
           <input
             placeholder="Search"
             className={"search-box" + (lightTheme ? "" : " dark")}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className="ug-list">
@@ -103,10 +125,13 @@ function Users() {
                   dispatch(refreshSidebarFun());
                 }}
               >
-                <p className={"con-icon" + (lightTheme ? "" : " dark")}>T</p>
+                <p className={"con-icon" + (lightTheme ? "" : " dark")}>
+                  {user.name[0]}
+                </p>
                 <p className={"con-title" + (lightTheme ? "" : " dark")}>
                   {user.name}
                 </p>
+                {getAllTags(user)}
               </motion.div>
             );
           })}

@@ -215,7 +215,7 @@ function Login() {
                   setShowLogin(true);
                 }}
               >
-              Log in
+              Log In
               </span>
             </p>
             {signInStatus ? (

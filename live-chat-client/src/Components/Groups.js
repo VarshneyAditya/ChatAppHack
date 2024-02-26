@@ -18,6 +18,7 @@ function Groups() {
   const lightTheme = useSelector((state) => state.themeKey);
   const dispatch = useDispatch();
   const [groups, SetGroups] = useState([]);
+  const [search, setSearch] = useState('');
   const userData = JSON.parse(localStorage.getItem("userData"));
   // console.log("Data from LocalStorage : ", userData);
   const nav = useNavigate();
@@ -36,12 +37,12 @@ function Groups() {
     };
 
     axios
-      .get("http://localhost:8080/chat/fetchGroups", config)
+      .get(`http://localhost:8080/chat/fetchGroups?search=${search}`, config)
       .then((response) => {
         console.log("Group Data from API ", response.data);
         SetGroups(response.data);
       });
-  }, [refresh]);
+  }, [refresh, search]);
 
   return (
     <AnimatePresence>
@@ -79,7 +80,7 @@ function Groups() {
           <input
             placeholder="Search"
             className={"search-box" + (lightTheme ? "" : " dark")}
-            onChange={(e) => console.log('===> ', e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className="ug-list">
@@ -110,7 +111,7 @@ function Groups() {
                   dispatch(refreshSidebarFun());
                 }}
               >
-                <p className={"con-icon" + (lightTheme ? "" : " dark")}>T</p>
+                <p className={"con-icon" + (lightTheme ? "" : " dark")}>{group.chatName[0]}</p>
                 <p className={"con-title" + (lightTheme ? "" : " dark")}>
                   {group.chatName}
                 </p>
