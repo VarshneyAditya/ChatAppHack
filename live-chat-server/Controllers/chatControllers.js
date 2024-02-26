@@ -71,7 +71,14 @@ const fetchChats = asyncHandler(async (req, res) => {
 
 const fetchGroups = asyncHandler(async (req, res) => {
   try {
-    const allGroups = await Chat.where("isGroupChat").equals(true);
+    console.log("------------------------------------------", req);
+    const query = req.query.search
+      ? {
+          chatName: { $regex: `^${req.query.search}`, $options: "i" },
+          _id: { $ne: req.user._id },
+        }
+      : {};
+    const allGroups = await Chat.find(query).where("isGroupChat").equals(true);
     res.status(200).send(allGroups);
   } catch (error) {
     res.status(400);

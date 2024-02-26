@@ -242,8 +242,6 @@ input:focus {
 
 .welcome-logo {
   height: 20vw;
-  background-color: purple;
-  box-shadow: rgba(182, 156, 186, 0.19) 0px 10px 20px, rgb(120 18 145) 0px 6px 6px;
   margin: 10px 10px;
 }
 
@@ -294,6 +292,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.23);
 }
 
 .login-text {
