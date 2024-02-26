@@ -6,6 +6,7 @@
 .icon {
   width: 1.25em !important;
   height: 1.25em !important;
+  color: #95007fc2;
 }
 
 .main-container {
@@ -109,6 +110,7 @@ input:focus {
   align-self: center;
   margin-left: 10px;
   margin-right: 5px;
+  color: #95007fc2;
 }
 
 .con-title {
@@ -240,8 +242,18 @@ input:focus {
 
 .welcome-logo {
   height: 20vw;
-  width: 75%;
   background-color: purple;
+  box-shadow: rgba(182, 156, 186, 0.19) 0px 10px 20px, rgb(120 18 145) 0px 6px 6px;
+  margin: 10px 10px;
+}
+
+.login-welcome-logo{
+  height: 20vw;
+  border-radius: 20px;
+  background-color: purple;
+  box-shadow: rgba(182, 156, 186, 0.19) 0px 10px 20px, rgb(120 18 145) 0px 6px 6px;
+  padding: 20px;
+  margin: 10px 10px; 
 }
 
 .welcome-container {
@@ -295,7 +307,7 @@ input:focus {
   border-radius: 20px;
   margin: 10px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #63d7b0;
+  color: #95007fc2;
   font-weight: bolder;
   display: flex;
   flex-direction: column;
@@ -353,9 +365,10 @@ input:focus {
 }
 
 .hyper {
-  color: darkviolet;
+  color: #4d0241c2;
   text-decoration: underline;
   cursor: pointer;
+  margin-left: 8px;
 }
 
 .other-icons {
