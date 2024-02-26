@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../Images/live-chat_512px.png";
+import logo from "../Images/live-chat.png";
 import { Backdrop, Button, CircularProgress, TextField } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -95,7 +95,7 @@ function Login() {
       </Backdrop>
       <div className="login-container">
         <div className="image-container">
-          <img src={logo} alt="Logo" className="welcome-logo" />
+          <img src={logo} alt="Logo" className="login-welcome-logo" />
         </div>
         {showlogin && (
           <div className="login-box">
@@ -155,7 +155,7 @@ function Login() {
         )}
         {!showlogin && (
           <div className="login-box">
-            <p className="login-text">Create your Account</p>
+            <p className="login-text">Create Your Account</p>
             <TextField
               onChange={changeHandler}
               id="standard-basic"
@@ -208,14 +208,14 @@ function Login() {
               Sign Up
             </Button>
             <p>
-              Already have an Account ?
+              Already Have An Account?
               <span
                 className="hyper"
                 onClick={() => {
                   setShowLogin(true);
                 }}
               >
-                Log in
+              Log in
               </span>
             </p>
             {signInStatus ? (
