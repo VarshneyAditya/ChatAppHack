@@ -70,7 +70,7 @@ const chatLogs = [
         </TableBody>
       </Table>
     </TableContainer>
-    <Button variant="contained" color="primary" onClick={downloadCsv} style={{ marginTop: '10px' }}>
+    <Button variant="contained" color="primary" onClick={downloadCsv} style={{ marginTop: '10px', background:'#95007fc2' }}>
         Download CSV
     </Button>
     </Box>
